@@ -15,10 +15,12 @@ class RedshiftServerlessNamespaceStack(cdk.Stack):
 
         redshift_full_command_access = iam.ManagedPolicy.from_aws_managed_policy_name(
             "AmazonRedshiftAllCommandsFullAccess")
+        s3_full_command_access = iam.ManagedPolicy.from_aws_managed_policy_name(
+            "AmazonS3FullAccess")
 
         role = iam.Role(self, f"{target_environment}LMDRedshiftServerlessRole",
                         assumed_by=iam.ServicePrincipal("redshift.amazonaws.com"),
-                        managed_policies=[redshift_full_command_access])
+                        managed_policies=[redshift_full_command_access,s3_full_command_access])
 
         secret_string_generator = secretsmanager.SecretStringGenerator(
             include_space=False, exclude_punctuation=True, password_length=15, require_each_included_type=True, exclude_characters=" \\\"\/@")
