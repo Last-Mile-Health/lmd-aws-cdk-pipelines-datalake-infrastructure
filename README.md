@@ -116,7 +116,7 @@ There are few interesting details to point out here:
 
 Figure below illustrates the continuous delivery of data lake infrastructure.
 
-![Alt](./resources/Aws-cdk-pipelines-blog-datalake-continuous_delivery_data_lake_infra.png)
+![Alt](./resources/LMD_2.0_CI_CD_pipeline.png)
 
 There are few interesting details to point out here:
 
@@ -126,6 +126,7 @@ There are few interesting details to point out here:
 1. Code changes made to the main branch of the repo are automatically deployed to the dev environment of the data lake.
 1. Code changes to the test branch of the repo are automatically deployed to the test environment.
 1. Code changes to the prod branch of the repo are automatically deployed to the prod environment.
+1. Code deployment to the prod environment requires a manual approval from the system administrator
 
 ### Source code structure
 
