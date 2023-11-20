@@ -129,7 +129,7 @@ There are few interesting details to point out here:
 
 ### Source code structure
 
-Table below explains how this source ode structured:
+Table below explains how this source code structured:
 
 | File / Folder                                              | Description                                                                                                                                                                               |
 | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
