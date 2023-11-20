@@ -169,10 +169,10 @@ This section has various steps you need to perform before you deploy data lake r
 
 1. **AWS CLI** - make sure you have AWS CLI configured on your system. If not, refer to [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) for more details.
 
-1. **AWS CDK** - install compatible AWS CDK version
+1. **AWS CDK** - install compatible AWS CDK version (preferably the latest version)
 
     ```bash
-    npm install -g aws-cdk@1.109.0
+    npm install -g aws-cdk
     ```
 
 1. **Python** - make sure you have Python SDK installed on your system. We recommend Python 3.7 and above.
