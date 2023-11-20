@@ -139,7 +139,7 @@ Table below explains how this source ode structured:
 | [s3_bucket_zones_stack.py](./lib/s3_bucket_zones_stack.py) | Stack creates S3 buckets - raw, conformed, and purpose-built. This also creates an S3 bucket for server access logging and AWS KMS Key to enabled server side encryption for all buckets. |
 | [tagging.py](./lib/tagging.py)                             | Program to tag all provisioned resources.                                                                                                                                                 |
 | [vpc_stack.py](./lib/vpc_stack.py)                         | Contains all resources related to the VPC used by Data Lake infrastructure and services. This includes: VPC, Security Groups, and VPC Endpoints (both Gateway and Interface types).       |
-| resources                                                  | This folder has static resources such as architecture diagrams, developer guide etc.                                                                                                      |
+| [Resources](./resources)                                   | This folder has static resources such as architecture diagrams, developer guide etc.                                                                                                      |
 
 ---
 
