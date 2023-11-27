@@ -116,7 +116,7 @@ There are few interesting details to point out here:
 
 Figure below illustrates the continuous delivery of data lake infrastructure.
 
-![Alt](./resources/Aws-cdk-pipelines-blog-datalake-continuous_delivery_data_lake_infra.png)
+![Alt](./resources/LMD_2.0_CI_CD_pipeline.png)
 
 There are few interesting details to point out here:
 
@@ -126,20 +126,24 @@ There are few interesting details to point out here:
 1. Code changes made to the main branch of the repo are automatically deployed to the dev environment of the data lake.
 1. Code changes to the test branch of the repo are automatically deployed to the test environment.
 1. Code changes to the prod branch of the repo are automatically deployed to the prod environment.
+1. Code deployment to the prod environment requires a manual approval from the system administrator
 
 ### Source code structure
 
-Table below explains how this source ode structured:
+Table below explains how this source code structured:
 
-| File / Folder                                              | Description                                                                                                                                                                               |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [app.py](./app.py)                                         | Application entry point.                                                                                                                                                                  |
-| [pipeline_stack.py](./lib/pipeline_stack.py)               | Pipeline stack entry point.                                                                                                                                                               |
-| [pipeline_deploy_stage.py](./lib/pipeline_deploy_stage.py) | Pipeline deploy stage entry point.                                                                                                                                                        |
-| [s3_bucket_zones_stack.py](./lib/s3_bucket_zones_stack.py) | Stack creates S3 buckets - raw, conformed, and purpose-built. This also creates an S3 bucket for server access logging and AWS KMS Key to enabled server side encryption for all buckets. |
-| [tagging.py](./lib/tagging.py)                             | Program to tag all provisioned resources.                                                                                                                                                 |
-| [vpc_stack.py](./lib/vpc_stack.py)                         | Contains all resources related to the VPC used by Data Lake infrastructure and services. This includes: VPC, Security Groups, and VPC Endpoints (both Gateway and Interface types).       |
-| resources                                                  | This folder has static resources such as architecture diagrams, developer guide etc.                                                                                                      |
+| File / Folder                                                                          | Description                                                                                                                                                                               |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [app.py](./app.py)                                                                     | Application entry point.                                                                                                                                                                  |
+| [pipeline_stack.py](./lib/pipeline_stack.py)                                           | Pipeline stack entry point.                                                                                                                                                               |
+| [pipeline_deploy_stage.py](./lib/pipeline_deploy_stage.py)                             | Pipeline deploy stage entry point.                                                                                                                                                        |
+| [s3_bucket_zones_stack.py](./lib/s3_bucket_zones_stack.py)                             | Stack creates S3 buckets - raw, conformed, and purpose-built. This also creates an S3 bucket for server access logging and AWS KMS Key to enabled server side encryption for all buckets. |
+| [tagging.py](./lib/tagging.py)                                                         | Program to tag all provisioned resources.                                                                                                                                                 |
+| [configuration.py](./lib/configuration.py)                                             | Contains all custom configurations                                                                                                                                                        |
+| [vpc_stack.py](./lib/vpc_stack.py)                                                     | Contains all resources related to the VPC used by Data Lake infrastructure and services. This includes: VPC, Security Groups, and VPC Endpoints (both Gateway and Interface types).       |
+| [redshift_serverless_namespace_stack.py](./lib/redshift_serverless_namespace_stack.py) | Contains redshift namspace stack such as database objects and users etc.                                                                                                                  |
+| [redshift_serverless_workgroup_stack.py](./lib/redshift_serverless_workgroup_stack.py) | Contains all compute resources such as RPUs, VPC subnet groups, security groups etc for redshift.                                                                                         |
+| [Resources](./resources)                                                               | This folder has static resources such as architecture diagrams, developer guide etc.                                                                                                      |
 
 ---
 
@@ -165,10 +169,10 @@ This section has various steps you need to perform before you deploy data lake r
 
 1. **AWS CLI** - make sure you have AWS CLI configured on your system. If not, refer to [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) for more details.
 
-1. **AWS CDK** - install compatible AWS CDK version
+1. **AWS CDK** - install compatible AWS CDK version (preferably the latest version)
 
     ```bash
-    npm install -g aws-cdk@1.109.0
+    npm install -g aws-cdk
     ```
 
 1. **Python** - make sure you have Python SDK installed on your system. We recommend Python 3.7 and above.
