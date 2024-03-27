@@ -1,7 +1,10 @@
 # Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
-import aws_cdk.core as cdk
+from constructs import Construct
+
+from aws_cdk import Stage
+
 from .vpc_stack import VpcStack
 from .s3_bucket_zones_stack import S3BucketZonesStack
 from .tagging import tag
@@ -10,9 +13,9 @@ from .redshift_serverless_namespace_stack import RedshiftServerlessNamespaceStac
 from .redshift_serverless_workgroup_stack import RedshiftServerlessWorkgroupStack
 
 
-class PipelineDeployStage(cdk.Stage):
+class PipelineDeployStage(Stage):
     def __init__(
-        self, scope: cdk.Construct, construct_id: str,
+        self, scope: Construct, construct_id: str,
         target_environment: str, deployment_account_id: str,
         **kwargs
     ):

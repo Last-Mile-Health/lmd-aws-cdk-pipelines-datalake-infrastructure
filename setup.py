@@ -14,10 +14,10 @@ setuptools.setup(
     description="A CDK Python app for deploying foundational infrastructure for a Data Lake in AWS",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="Isaiah Grant <igrant@2ndwatch.com>, Ravi Itha <itharav@amazon.com>, Zahid Muhammad Ali <zhidli@amazon.com>",
+    author="Bwighane Mwalwanda <bsmwalwanda@gmail.com>, Branford T Gbieor <gbieorbranford@gmail.com>",
     packages=setuptools.find_packages(),
     install_requires=[
-        "aws-cdk.core==1.181.1",
+        "aws-cdk-lib==2.133.0",
     ],
     python_requires=">=3.9",
     classifiers=[
