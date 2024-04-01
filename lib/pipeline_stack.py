@@ -8,6 +8,7 @@ from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_codepipeline as codepipeline
 from aws_cdk import aws_codepipeline_actions as codepipeline_actions
+from aws_cdk.aws_codepipeline_actions import GitHubTrigger
 
 from .configuration import (
     DEPLOYMENT, GITHUB_REPOSITORY_NAME, GITHUB_REPOSITORY_OWNER_NAME, GITHUB_TOKEN,
@@ -55,7 +56,15 @@ class PipelineStack(Stack):
 
         logical_id_prefix = get_logical_id_prefix()
 
-        input = CodePipelineSource.git_hub("bwighane/dude", "main")
+        repository = self.mappings[DEPLOYMENT][GITHUB_REPOSITORY_OWNER_NAME] + \
+            "/" + self.mappings[DEPLOYMENT][GITHUB_REPOSITORY_NAME]
+
+        input = CodePipelineSource.git_hub(
+            repository,
+            target_branch,
+            authentication=SecretValue.secrets_manager(self.mappings[DEPLOYMENT][GITHUB_TOKEN]),
+            trigger=GitHubTrigger.WEBHOOK
+        )
 
         pipeline = CodePipeline(
             self,
