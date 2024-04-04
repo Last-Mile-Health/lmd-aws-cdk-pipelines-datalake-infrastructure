@@ -1,14 +1,17 @@
 
-import aws_cdk.aws_redshiftserverless as redshiftserverless
-import aws_cdk.core as cdk
-import aws_cdk.aws_iam as iam
-import aws_cdk.aws_secretsmanager as secretsmanager
+from aws_cdk import Stack
+from constructs import Construct
+
+from aws_cdk import aws_redshiftserverless as redshiftserverless
+from aws_cdk import aws_iam as iam
+from aws_cdk import aws_secretsmanager as secretsmanager
+
 from .configuration import (REDSHIFT_DEFAULT_USER, REDSHIFT_DEFAULT_DATABASE)
 
 
-class RedshiftServerlessNamespaceStack(cdk.Stack):
+class RedshiftServerlessNamespaceStack(Stack):
 
-    def __init__(self, scope: cdk.Construct, construct_id: str, target_environment: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str, target_environment: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         namespace_name = f"{target_environment}-lmd-v2".lower()
@@ -20,10 +23,10 @@ class RedshiftServerlessNamespaceStack(cdk.Stack):
 
         role = iam.Role(self, f"{target_environment}LMDRedshiftServerlessRole",
                         assumed_by=iam.ServicePrincipal("redshift.amazonaws.com"),
-                        managed_policies=[redshift_full_command_access,s3_full_command_access])
+                        managed_policies=[redshift_full_command_access, s3_full_command_access])
 
         secret_string_generator = secretsmanager.SecretStringGenerator(
-            include_space=False, exclude_punctuation=True, password_length=15, require_each_included_type=True, exclude_characters=" \\\"\/@")
+            include_space=False, exclude_punctuation=True, password_length=15, require_each_included_type=True, exclude_characters="\\\"/@")
 
         secret = secretsmanager.Secret(self, f'{target_environment}LMDRedshiftPassword',
                                        generate_secret_string=secret_string_generator)
