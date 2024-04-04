@@ -23,4 +23,4 @@ values.txt
 bin/
 pyvenv.cfg
 
-/dl-infrustructure
+.venv/
