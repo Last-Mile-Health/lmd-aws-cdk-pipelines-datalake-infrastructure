@@ -15,7 +15,7 @@ class EmptyStack(Stack):
         @param scope Construct: Parent of this stack, usually an App or a Stage, but could be any construct.:
         @param construct_id str:
             The construct ID of this stack. If stackName is not explicitly defined,
-            this id (and any parent IDs) will be used to determine the physical ID of the stack.
+            this id (and any parent IDs) will be used to determine the physical ID of the stack
         @param kwargs:
         """
         super().__init__(scope, construct_id, **kwargs)
