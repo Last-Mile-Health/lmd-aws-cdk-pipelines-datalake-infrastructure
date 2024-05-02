@@ -16,7 +16,7 @@ class RedshiftServerlessWorkgroupStack(Stack):
         workgroup_name = f"{target_environment}-lmd-v2".lower()
 
         BASE_CAPACITY = 8
-        MAX_CAPACITY = 8
+        MAX_CAPACITY = 16
 
         workgroup_configuration = {
             "namespace_name": namespace_name,
