@@ -23,7 +23,7 @@ class RedshiftServerlessWorkgroupStack(Stack):
             "workgroup_name": workgroup_name,
             "publicly_accessible": True,
             "base_capacity": BASE_CAPACITY,
-            "max_capacity": MAX_CAPACITY,
+            # "max_capacity": MAX_CAPACITY,
             "tags": [{"key": "type", "value": "lmd-2"}]
         }
         redshift_namespace_stack = RedshiftServerlessNamespaceStack(
