@@ -15,10 +15,15 @@ class RedshiftServerlessWorkgroupStack(Stack):
         namespace_name = f"{target_environment}-lmd-v2".lower()
         workgroup_name = f"{target_environment}-lmd-v2".lower()
 
+        BASE_CAPACITY = 8
+        MAX_CAPACITY = 16
+
         workgroup_configuration = {
             "namespace_name": namespace_name,
             "workgroup_name": workgroup_name,
             "publicly_accessible": True,
+            "base_capacity": BASE_CAPACITY,
+            "max_capacity": MAX_CAPACITY,
             "tags": [{"key": "type", "value": "lmd-2"}]
         }
         redshift_namespace_stack = RedshiftServerlessNamespaceStack(
