@@ -63,7 +63,7 @@ class S3BucketZonesStack(Stack):
         )
 
         s3_deployment.BucketDeployment(self, "InitialFolders",
-                                       sources=[s3_deployment.Source.asset("./assets")],
+                                       sources=[s3_deployment.Source.asset("./country-assets")],
                                        destination_bucket=raw_bucket
                                        )
 
