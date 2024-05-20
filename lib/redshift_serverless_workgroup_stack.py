@@ -24,9 +24,10 @@ class RedshiftServerlessWorkgroupStack(Stack):
             "publicly_accessible": True,
             "base_capacity": BASE_CAPACITY,
             "max_capacity": MAX_CAPACITY,
-            "config_parameters": [{"key": "max_query_execution_time", "value": 900}],
             "tags": [{"key": "type", "value": "lmd-2"}]
         }
+
+        # "config_parameters": [{"key": "max_query_execution_time", "value": 1800}],
         redshift_namespace_stack = RedshiftServerlessNamespaceStack(
             self,
             f'{target_environment}rednspace'.lower(),
