@@ -7,6 +7,9 @@ from constructs import Construct
 from aws_cdk import aws_iam as iam
 from aws_cdk import aws_kms as kms
 from aws_cdk import aws_s3 as s3
+from aws_cdk import aws_s3_deployment as s3_deployment
+
+import os
 
 
 from .configuration import (
@@ -58,6 +61,12 @@ class S3BucketZonesStack(Stack):
             access_logs_bucket,
             s3_kms_key,
         )
+
+        s3_deployment.BucketDeployment(self, "InitialFolders",
+                                       sources=[s3_deployment.Source.asset("./country-assets")],
+                                       destination_bucket=raw_bucket
+                                       )
+
         conformed_bucket = self.create_data_lake_zone_bucket(
             f'{target_environment}{logical_id_prefix}StagingBucket',
             f'{target_environment.lower()}-{resource_name_prefix}-{self.account}-{self.region}-staging',
