@@ -33,17 +33,17 @@ class VpcStack(Stack):
         logical_id_prefix = get_logical_id_prefix()
         vpc = ec2.Vpc(self, f'{logical_id_prefix}Vpc', cidr=vpc_cidr)
 
-        # Adding more IP Addresses
+        # # Adding more IP Addresses
 
-        ec2.CfnVPCCidrBlock(self, "SecondaryVPCCIDR",
-                            vpc_id=vpc.vpc_id,
-                            cidr_block="10.20.128.0/17"
-                            )
+        # ec2.CfnVPCCidrBlock(self, "SecondaryVPCCIDR",
+        #                     vpc_id=vpc.vpc_id,
+        #                     cidr_block="10.20.128.0/17"
+        #                     )
 
-        # Create subnets within the new CIDR block
-        new_subnet = vpc.add_private_subnet(cidr_block="10.20.128.0/24")
+        # # Create subnets within the new CIDR block
+        # new_subnet = vpc.add_private_subnet(cidr_block="10.20.128.0/24")
 
-        # Adding more IP addresses
+        # # Adding more IP addresses
 
         shared_security_group_ingress = ec2.SecurityGroup(
             self,
