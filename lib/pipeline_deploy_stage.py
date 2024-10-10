@@ -40,6 +40,7 @@ class PipelineDeployStage(Stage):
             target_environment=target_environment,
             **kwargs,
         )
+
         bucket_stack = S3BucketZonesStack(
             self,
             f'{target_environment}{logical_id_prefix}InfrastructureS3BucketZones',
