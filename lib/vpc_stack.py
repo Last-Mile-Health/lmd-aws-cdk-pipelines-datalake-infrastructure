@@ -1,8 +1,11 @@
 # Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
-import aws_cdk.core as cdk
-import aws_cdk.aws_ec2 as ec2
+from constructs import Construct
+
+from aws_cdk import Stack, CfnOutput
+from aws_cdk import aws_ec2 as ec2
+
 from .configuration import (
     AVAILABILITY_ZONE_1, AVAILABILITY_ZONE_2, AVAILABILITY_ZONE_3, ROUTE_TABLE_1, ROUTE_TABLE_2, ROUTE_TABLE_3,
     SHARED_SECURITY_GROUP_ID, SUBNET_ID_1, SUBNET_ID_2, SUBNET_ID_3, VPC_CIDR, VPC_ID,
@@ -10,13 +13,13 @@ from .configuration import (
 )
 
 
-class VpcStack(cdk.Stack):
+class VpcStack(Stack):
 
-    def __init__(self, scope: cdk.Construct, construct_id: str, target_environment: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str, target_environment: str, **kwargs) -> None:
         """
         CloudFormation stack to create AWS KMS Key, Amazon S3 resources such as buckets and bucket policies.
 
-        @param scope cdk.Construct:
+        @param scope Construct:
             Parent of this stack, usually an App or a Stage, but could be any construct.:
         @param construct_id str:
             The construct ID of this stack. If stackName is not explicitly defined,
@@ -29,6 +32,7 @@ class VpcStack(cdk.Stack):
         vpc_cidr = mappings[VPC_CIDR]
         logical_id_prefix = get_logical_id_prefix()
         vpc = ec2.Vpc(self, f'{logical_id_prefix}Vpc', cidr=vpc_cidr)
+
         shared_security_group_ingress = ec2.SecurityGroup(
             self,
             f'{target_environment}{logical_id_prefix}SharedIngressSecurityGroup',
@@ -76,67 +80,67 @@ class VpcStack(cdk.Stack):
         )
 
         # Stack Outputs that are programmatically synchronized
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}Vpc',
             value=vpc.vpc_id,
             export_name=mappings[VPC_ID],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcAvailabilityZone1',
             value=vpc.availability_zones[0],
             export_name=mappings[AVAILABILITY_ZONE_1],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcAvailabilityZone2',
             value=vpc.availability_zones[1],
             export_name=mappings[AVAILABILITY_ZONE_2],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcAvailabilityZone3',
             value=vpc.availability_zones[2],
             export_name=mappings[AVAILABILITY_ZONE_3],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcPrivateSubnet1',
             value=vpc.private_subnets[0].subnet_id,
             export_name=mappings[SUBNET_ID_1],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcPrivateSubnet2',
             value=vpc.private_subnets[1].subnet_id,
             export_name=mappings[SUBNET_ID_2],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcPrivateSubnet3',
             value=vpc.private_subnets[2].subnet_id,
             export_name=mappings[SUBNET_ID_3],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcRouteTable1',
             value=vpc.private_subnets[0].route_table.route_table_id,
             export_name=mappings[ROUTE_TABLE_1],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcRouteTable2',
             value=vpc.private_subnets[1].route_table.route_table_id,
             export_name=mappings[ROUTE_TABLE_2],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}VpcRouteTable3',
             value=vpc.private_subnets[2].route_table.route_table_id,
             export_name=mappings[ROUTE_TABLE_3],
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}SharedSecurityGroup',
             value=shared_security_group_ingress.security_group_id,

@@ -4,7 +4,9 @@
 # !/usr/bin/env python3
 
 import os
-import aws_cdk.core as cdk
+# import aws_cdk.core as cdk
+
+from aws_cdk import App
 
 from lib.pipeline_stack import PipelineStack
 from lib.empty_stack import EmptyStack
@@ -14,7 +16,8 @@ from lib.configuration import (
 )
 from lib.tagging import tag
 
-app = cdk.App()
+
+app = App()
 
 if bool(os.environ.get('IS_BOOTSTRAP')):
     EmptyStack(app, 'StackStub')

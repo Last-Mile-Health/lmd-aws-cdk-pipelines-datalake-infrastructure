@@ -1,10 +1,16 @@
 # Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
-import aws_cdk.core as cdk
-import aws_cdk.aws_iam as iam
-import aws_cdk.aws_kms as kms
-import aws_cdk.aws_s3 as s3
+from aws_cdk import Stack, RemovalPolicy, CfnOutput, Duration
+from constructs import Construct
+
+from aws_cdk import aws_iam as iam
+from aws_cdk import aws_kms as kms
+from aws_cdk import aws_s3 as s3
+from aws_cdk import aws_s3_deployment as s3_deployment
+
+import os
+
 
 from .configuration import (
     PROD, S3_ACCESS_LOG_BUCKET, S3_CONFORMED_BUCKET, S3_KMS_KEY, S3_PURPOSE_BUILT_BUCKET, S3_RAW_BUCKET, TEST,
@@ -12,16 +18,16 @@ from .configuration import (
 )
 
 
-class S3BucketZonesStack(cdk.Stack):
+class S3BucketZonesStack(Stack):
     def __init__(
-        self, scope: cdk.Construct, construct_id: str,
+        self, scope: Construct, construct_id: str,
         target_environment: str, deployment_account_id: str,
         **kwargs
     ) -> None:
         """
         CloudFormation stack to create AWS KMS Key, Amazon S3 resources such as buckets and bucket policies.
 
-        @param scope cdk.Construct: Parent of this stack, usually an App or a Stage, but could be any construct.:
+        @param scope Construct: Parent of this stack, usually an App or a Stage, but could be any construct.:
         @param construct_id str:
             The construct ID of this stack. If stackName is not explicitly defined,
             this id (and any parent IDs) will be used to determine the physical ID of the stack.
@@ -35,9 +41,9 @@ class S3BucketZonesStack(cdk.Stack):
         mappings = get_environment_configuration(target_environment)
         logical_id_prefix = get_logical_id_prefix()
         resource_name_prefix = get_resource_name_prefix()
-        self.removal_policy = cdk.RemovalPolicy.DESTROY
+        self.removal_policy = RemovalPolicy.DESTROY
         if (target_environment == PROD or target_environment == TEST):
-            self.removal_policy = cdk.RemovalPolicy.RETAIN
+            self.removal_policy = RemovalPolicy.RETAIN
 
         s3_kms_key = self.create_kms_key(
             deployment_account_id,
@@ -55,6 +61,12 @@ class S3BucketZonesStack(cdk.Stack):
             access_logs_bucket,
             s3_kms_key,
         )
+
+        s3_deployment.BucketDeployment(self, "InitialFolders",
+                                       sources=[s3_deployment.Source.asset("./country-assets")],
+                                       destination_bucket=raw_bucket
+                                       )
+
         conformed_bucket = self.create_data_lake_zone_bucket(
             f'{target_environment}{logical_id_prefix}StagingBucket',
             f'{target_environment.lower()}-{resource_name_prefix}-{self.account}-{self.region}-staging',
@@ -69,31 +81,31 @@ class S3BucketZonesStack(cdk.Stack):
         )
 
         # Stack Outputs that are programmatically synchronized
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}KmsKeyArn',
             value=s3_kms_key.key_arn,
             export_name=mappings[S3_KMS_KEY]
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}AccessLogsBucketName',
             value=access_logs_bucket.bucket_name,
             export_name=mappings[S3_ACCESS_LOG_BUCKET]
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}RawBucketName',
             value=raw_bucket.bucket_name,
             export_name=mappings[S3_RAW_BUCKET]
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}StagingBucketName',
             value=conformed_bucket.bucket_name,
             export_name=mappings[S3_CONFORMED_BUCKET]
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             f'{target_environment}{logical_id_prefix}CuratedBucketName',
             value=purpose_built_bucket.bucket_name,
@@ -151,20 +163,20 @@ class S3BucketZonesStack(cdk.Stack):
         lifecycle_rules = [
             s3.LifecycleRule(
                 enabled=True,
-                expiration=cdk.Duration.days(60),
-                noncurrent_version_expiration=cdk.Duration.days(30),
+                expiration=Duration.days(60),
+                noncurrent_version_expiration=Duration.days(30),
             )
         ]
         if self.target_environment == PROD:
             lifecycle_rules = [
                 s3.LifecycleRule(
                     enabled=True,
-                    expiration=cdk.Duration.days(2555),
-                    noncurrent_version_expiration=cdk.Duration.days(90),
+                    expiration=Duration.days(2555),
+                    noncurrent_version_expiration=Duration.days(90),
                     transitions=[
                         s3.Transition(
                             storage_class=s3.StorageClass.GLACIER,
-                            transition_after=cdk.Duration.days(365),
+                            transition_after=Duration.days(365),
                         )
                     ]
                 )
@@ -239,7 +251,7 @@ class S3BucketZonesStack(cdk.Stack):
             encryption=s3.BucketEncryption.KMS,
             encryption_key=s3_kms_key,
             public_read_access=False,
-            removal_policy=cdk.RemovalPolicy.RETAIN,
+            removal_policy=RemovalPolicy.RETAIN,
             versioned=True,
             object_ownership=s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
         )
